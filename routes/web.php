@@ -13,11 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
+
+
+Route::get('/', function () {
+    return view('guest.home');
+})->name('index');
+
 
 // admin routes
 Route::middleware('auth')
@@ -30,5 +34,6 @@ Route::middleware('auth')
 
 
 Route::get("{any?}", function(){
+    return redirect()->route('index');
     return view("guest.home");
 })->where("any", ".*");
