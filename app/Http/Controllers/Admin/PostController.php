@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -40,6 +41,22 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required|min:5|max:255',
+            'content' => 'required'
+        ]);
+
+        $form_data = $request->all();
+
+        $post = new Post();
+        $post->fill($form_data);
+
+        $slug = $this->getSlug($post->title);
+
+        $post->slug = $slug;
+        $post->save();
+
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**
@@ -63,6 +80,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -75,6 +93,18 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         //
+        $request->validate([
+            'title' => 'required|min:5|max:255',
+            'content' => 'required'
+        ]);
+
+        $form_data = $request->all();
+        if($post->title != $form_data['title']){
+            $slug = $this->getSlug($form_data['title']);
+            $form_data['slug'] = $slug;
+        };
+        $post->update($form_data);
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**
@@ -86,5 +116,20 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    // funzione
+    private function getSlug($title){
+        $slug = Str::slug($title);
+        $slug_base = $slug;
+
+        $existingPost = Post::where('slug', $slug)->first();
+        $counter = 1;
+        while($existingPost){
+            $slug = $slug_base . '_' . $counter;
+            $counter++;
+            $existingPost = Post::where('slug', $slug)->first();
+        }
+        return $slug;
     }
 }
