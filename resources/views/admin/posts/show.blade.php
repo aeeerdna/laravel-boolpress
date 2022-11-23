@@ -11,6 +11,6 @@
     </p>
 
     <div class="mt-3">
-        <a href="{{route('admin.posts.edit', $psot->id)}}">Edit</a>
+        <a href="{{route('admin.posts.edit', $post->id)}}">Edit</a>
     </div>
 @endsection
