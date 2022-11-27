@@ -9,7 +9,6 @@
         </div>
     @endif
 
-
     <form method="POST" action="{{ route('admin.posts.store') }}">
         @csrf
         <div @error('title') class="is-invalid" @enderror>
@@ -20,7 +19,7 @@
             @enderror
         </div>
 
-        <!-- categories -->
+        <!-- categorie -->
         <div @error('category_id') class="is-invalid" @enderror>
             <label for="category_id">Category: </label>
             <select name="category_id">
@@ -43,6 +42,7 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
+
         <div>
             <input type="submit" value="Crea">
         </div>

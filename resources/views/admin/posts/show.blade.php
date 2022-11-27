@@ -1,24 +1,31 @@
 @extends('layouts.dashboard')
 
 @section('content')
-
     <h1>
-        {{$post->title}}
+        {{ $post->title }}
     </h1>
 
     <p>
-        {{$post->content}}
+        {{ $post->content }}
     </p>
 
-    <div class="mt-3">
-        <a href="{{route('admin.posts.edit', $post->id)}}">Edit</a>
+    @if ($post->category)
+        <p>
+            {{ $post->category->name }}
+        </p>
+    @else
+        <p>No category</p>
+    @endif
+
+    <div class="mt-5">
+        <a href="{{ route('admin.posts.edit', $post->id) }}">Edit</a>
     </div>
 
-    <div class="mt-3">
-        <form action="{{route('admin.posts.destroy', $post->id)}}" method="POST">
+    <div class="mt-2">
+        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST">
             @csrf
             @method('DELETE')
-            <input onclick="confirm('Are you sure??')" type="submit" value="Delete">
+            <input onclick="confirm('Are you sure?')" type="submit" value="Elimina">
         </form>
     </div>
 @endsection
