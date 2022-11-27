@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
+use App\Category;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -44,7 +46,12 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|min:5|max:255',
             'content' => 'required'
-        ]);
+        ],
+    [
+        'required' => ':attribute is mandatory',
+        'min' => ':attribute should be at least :min chars',
+        'max' => ':attribute should have max length of :max chars',
+    ]);
 
         $form_data = $request->all();
 
@@ -96,6 +103,10 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|min:5|max:255',
             'content' => 'required'
+        ],[
+            'required' => ':attribute is mandatory',
+            'min' => ':attribute should be at least :min chars',
+            'max' => ':attribute should have max length of :max chars',
         ]);
 
         $form_data = $request->all();
