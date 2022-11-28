@@ -13,7 +13,7 @@
         @csrf
         <div @error('title') class="is-invalid" @enderror>
             <label for="title">Title:</label>
-            <input type="text" required minlength="5" maxlength="255" name="title" value="{{ old('title', '') }}">
+            <input type="text" name="title" value="{{ old('title', '') }}">
             @error('title')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -35,16 +35,27 @@
             @enderror
         </div>
 
+
         <div @error('content') class="is-invalid" @enderror>
-            <label for="content">Contenuto:</label>
+            <label for="content">Content:</label>
             <textarea name="content" required cols="30" rows="10">{{ old('content', '') }}</textarea>
             @error('content')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
+        <!-- tags -->
+        <div @error('tags') class="is-invalid" @enderror>
+            <label>Tags:</label>
+            @foreach ($tags as $tag)
+                <input {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }} type="checkbox" name="tags[]"
+                    value={{ $tag->id }}>
+                <label>{{ $tag->name }}</label>
+            @endforeach
+        </div>
+
         <div>
-            <input type="submit" value="Crea">
+            <input type="submit" value="Create">
         </div>
     </form>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Category;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -31,7 +32,8 @@ class PostController extends Controller
     {
         //
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact(['categories', 'tags']));
     }
 
     /**
@@ -52,6 +54,10 @@ class PostController extends Controller
         $slug = $this->getSlug($post->title);
         $post->slug = $slug;
         $post->save();
+
+        if(array_key_exists('tags', $form_data)){
+            $post->tags()->sync($form_data['tags']);
+        }
 
         return redirect()->route('admin.posts.show', $post->id);
     }
@@ -78,7 +84,8 @@ class PostController extends Controller
     {
         //
         $categories = Category::all();
-        return view('admin.posts.edit', compact(['post', 'categories']));
+        $tags = Tag::all();
+        return view('admin.posts.edit', compact(['post', 'categories', 'tags']));
     }
 
     /**
@@ -98,6 +105,13 @@ class PostController extends Controller
             $slug = $this->getSlug($form_data['title']);
             $form_data['slug'] = $slug;
         }
+
+        if(array_key_exists('tags', $form_data)){
+            $post->tags()->sync($form_data['tags']);
+        }else{
+            $post->tags()->sync([]);
+        }
+
         $post->update($form_data);
         return redirect()->route('admin.posts.show', $post->id);
     }
@@ -111,6 +125,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        $post->tags()->sync([]);
         $post->delete();
         return redirect()->route('admin.posts.index');
     }
@@ -134,7 +149,8 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|min:5|max:255',
             'content' => 'required',
-            'category_id' => 'nullable|exists:categories,id'
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'exists:tags,id'
         ], [
             'required' => ':attribute is mandatory',
             'min' => ':attribute should be at least :min chars',
@@ -142,4 +158,5 @@ class PostController extends Controller
             'category_id.exists' => 'Category doesn\'t exists anymore :('
         ]);
     }
+
 }

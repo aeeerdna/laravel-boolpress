@@ -13,31 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
 Auth::routes();
 
 Route::get('/', function(){
-    return view("guest.home");
+      return view("guest.home");
 })->name('index');
 
-Route::get('/', function () {
-    return view('guest.home');
-})->name('index');
-
-
-// admin routes
 Route::middleware('auth')
-    ->namespace('Admin')
-    ->name('admin.')
-    ->prefix('admin')
-    ->group(function(){
-        Route::get('/', 'HomeController@index')->name('index');
-        Route::resource('posts','PostController');
-    });
+   ->namespace('Admin')
+   ->name('admin.')
+   ->prefix('admin')
+   ->group(function () {
+         Route::get('/', 'HomeController@index')->name('index');
+         Route::resource('posts', 'PostController');
+         Route::resource('categories', 'CategoryController');
+   });
 
-
-Route::get("{any?}", function(){
-    return redirect()->route('index');
-    return view("guest.home");
+Route::get("{any?}", function() {
+  return redirect()->route('index');
+//    return view("guest.home");
 })->where("any", ".*");
