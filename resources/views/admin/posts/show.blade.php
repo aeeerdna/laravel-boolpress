@@ -9,7 +9,7 @@
     @if ($post->category)
         <p><a href="{{ route('admin.categories.show', $post->category->id) }}"> {{ $post->category->name }}</a></p>
     @else
-        <p>Nessuna categoria</p>
+        <p>No category</p>
     @endif
 
     <p>
