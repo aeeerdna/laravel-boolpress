@@ -1911,10 +1911,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PostsComponent",
   data: function data() {
-    posts: [];
+    return {
+      posts: [],
+      errorMessage: ""
+    };
   },
   mounted: function mounted() {
-    console.log("PostComponent exist");
+    var _this = this;
+    console.log("PostComponent exists");
+    axios.get("/api/posts").then(function (_ref) {
+      var data = _ref.data;
+      if (data.success) {
+        _this.posts = data.results;
+      } else {
+        _this.errorMessage = data.error;
+      }
+    });
   }
 });
 
@@ -1954,7 +1966,11 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", [_vm._v("PostsComponent")]);
+  return _c("div", _vm._l(_vm.posts, function (post) {
+    return _c("div", {
+      key: post.id
+    }, [_vm._v("\n        " + _vm._s(post.title) + "\n    ")]);
+  }), 0);
 };
 var staticRenderFns = [];
 render._withStripped = true;

@@ -1,15 +1,30 @@
 <template>
-    <div>PostsComponent</div>
+    <div>
+        <div v-for="post in posts" :key="post.id">
+            {{ post.title }}
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
     name: "PostsComponent",
     data() {
-        posts: [];
+        return {
+            posts: [],
+            errorMessage: "",
+        };
     },
     mounted() {
-        console.log("PostComponent exist");
+        console.log("PostComponent exists");
+
+        axios.get("/api/posts").then(({ data }) => {
+            if (data.success) {
+                this.posts = data.results;
+            } else {
+                this.errorMessage = data.error;
+            }
+        });
     },
 };
 </script>
