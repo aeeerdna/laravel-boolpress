@@ -2,13 +2,17 @@
     <div>
         <div v-if="loading">...Loading...</div>
 
-        <div v-else-if="errorMessage.length > 0"></div>
+        <div v-else-if="errorMessage.length > 0">
+            {{ errorMessage }}
+        </div>
 
-        <div v-else>
+        <div v-else-if="posts.length > 0">
             <div v-for="post in posts" :key="post.id">
                 {{ post.title }}
             </div>
         </div>
+
+        <div v-else>No posts available...</div>
     </div>
 </template>
 
