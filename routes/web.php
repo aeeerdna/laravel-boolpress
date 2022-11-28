@@ -25,8 +25,14 @@ Route::middleware('auth')
    ->prefix('admin')
    ->group(function () {
          Route::get('/', 'HomeController@index')->name('index');
-         Route::resource('posts', 'PostController');
-         Route::resource('categories', 'CategoryController');
+         Route::resource('posts', 'PostController')->parameters([
+            'posts' => 'post:slug',
+         ]);
+         Route::resource('categories', 'CategoryController')->parameters([
+            'categories' => 'category:slug',
+         ]);
+
+        // Route::resource('tags', 'TagController')->parameters(['tags'=>'tag:slug']);
    });
 
 Route::get("{any?}", function() {
