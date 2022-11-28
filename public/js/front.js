@@ -1913,7 +1913,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       posts: [],
-      errorMessage: ""
+      errorMessage: "",
+      loading: true
     };
   },
   mounted: function mounted() {
@@ -1966,11 +1967,11 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", _vm._l(_vm.posts, function (post) {
+  return _c("div", [_vm.loading ? _c("div", [_vm._v("...Loading...")]) : _vm.errorMessage.length > 0 ? _c("div") : _c("div", _vm._l(_vm.posts, function (post) {
     return _c("div", {
       key: post.id
-    }, [_vm._v("\n        " + _vm._s(post.title) + "\n    ")]);
-  }), 0);
+    }, [_vm._v("\n            " + _vm._s(post.title) + "\n        ")]);
+  }), 0)]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
